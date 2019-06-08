@@ -1,5 +1,5 @@
 # linux-installer-media-creator
-A script which executes a number of commands, typically used in macOS for creating bootable Linux installer media.
+A script which executes a number of commands typically used in macOS for creating bootable Linux installer media.
 
 ## Important:
 I am not responsible for any loss/corruption of data/devices when this program is used, use at your own risk. To this end, make sure you **pass the correct device** as the "target-device" argument.
@@ -11,4 +11,6 @@ I am not responsible for any loss/corruption of data/devices when this program i
   * Currently, the script will quit "ungracefully" if an error occurs (cannot unmount target disk, etc.), meaning the IMG file that the script creates will not be deleted automatically.
 
 ## Usage:
+```
 linux\_installer\_creator.sh "iso-image" "target-disk"
+```
