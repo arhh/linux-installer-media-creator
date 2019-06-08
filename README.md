@@ -12,7 +12,7 @@ I am not responsible for any loss/corruption of data/devices when this program i
 
 ## Usage:
 ```
-linux\_installer\_creator.sh "iso-image" "target-disk"
+linux_installer_creator.sh "iso-image" "target-disk"
 ```
 
 ## Motivation for Writing This
