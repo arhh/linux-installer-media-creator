@@ -14,3 +14,6 @@ I am not responsible for any loss/corruption of data/devices when this program i
 ```
 linux\_installer\_creator.sh "iso-image" "target-disk"
 ```
+
+## Motivation for Writing This
+Executing the same set of commands to get Linux ISOs on USB drives was getting repetitive. I didn't want to install third-party GUIs so I just wrote this bash script.
