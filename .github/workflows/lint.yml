@@ -34,9 +34,9 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
+
       - name: Shell Linter
         uses: azohra/shell-linter@v0.5.0
         with:
+          path: .
           severity: style
-          
