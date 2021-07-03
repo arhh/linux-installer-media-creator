@@ -38,5 +38,5 @@ jobs:
       - name: Shell Linter
         uses: azohra/shell-linter@v0.5.0
         with:
-          severity: error
+          severity: style
           
