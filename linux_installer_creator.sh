@@ -3,15 +3,16 @@ set -e
 
 # Initialise constants
 TEMP_IMG="output.img"
+OS_TYPE=$(uname)
 
 # Check if user requested help and display help
 if [[ "$1" = "--help" ]]; then
-    printf "\\nWrite Linux ISO images to removable drives using macOS.\\n"
+    printf "\\nWrite Linux ISO images to removable drives.\\n"
     printf "\\nUSAGE:\\n"
     printf "\\t%s ISO_IMAGE TARGET_PATH\\n" "$0"
     printf "\\nNOTES:\\n"
-    printf "\\tThe image passed to this script should be in ISO format.\\n"
-    printf "\\tThis script uses the unbuffered 'raw' disk write (i.e. rdiskN).\\n"
+    printf "\\tThe image passed to this script should be in \"ISO\" format.\\n"
+    printf "\\tThis script uses the unbuffered \"raw\" disk write (i.e. rdiskN) when run in macOS.\\n"
     printf "\\tRoot privileges required.\\n"
     exit 0
 fi
@@ -28,7 +29,8 @@ SOURCE_PATH=$1
 TARGET_PATH=$2
 
 TARGET_RAW=$TARGET_PATH
-if [[ $OSTYPE = "darwin" ]]; then
+if [[ "$OS_TYPE" = "Darwin" ]]; then
+    printf "converting..."
     # If macOS then use "raw" path to target to improve write speed:
     TARGET_RAW="${TARGET_PATH:0:5}r${TARGET_PATH:5}"
     # Convert the ISO image to a "UDIF R/W image" for writing to target drive
@@ -37,19 +39,19 @@ if [[ $OSTYPE = "darwin" ]]; then
     diskutil unmountDisk "$TARGET_PATH"
 fi
 
-if [[ $OSTYPE = "darwin" ]]; then
+if [[ "$OS_TYPE" = "Darwin" ]]; then
     # Write the image to the unmounted drive
     sudo dd if="${TEMP_IMG}.dmg" of="$TARGET_RAW" bs=4m && sync
-elif [[ $OSTYPE = "linux-gnu" ]]; then
+elif [[ "$OS_TYPE" = "Linux" ]]; then
     sudo dd if="$SOURCE_PATH" of="$TARGET_RAW" bs=4M status=progress && sync
 else
     printf "Error: Unrecognised operating system \"%s\"\\n" "$OSTYPE"
     exit 1
 fi
 
-
-
 # Clean up by removing the IMG file
-rm output.img.dmg
+if [[ -f "${TEMP_IMG}.dmg" ]]; then
+    rm "${TEMP_IMG}.dmg"
+fi
 
 exit 0
