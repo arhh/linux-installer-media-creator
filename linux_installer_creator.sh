@@ -2,7 +2,6 @@
 
 TEMP_IMG="output.img"
 OS_TYPE=$(uname)
-IS_MACOS=0
 
 if [[ "$OS_TYPE" = "Darwin" ]]; then
     IS_MACOS=1
@@ -32,21 +31,22 @@ TARGET_PATH=$2
 SOURCE=$ISO_IMAGE
 TARGET_RAW=$TARGET_PATH
 
-if [[ "$IS_MACOS" ]]; then
+if [[ -z "$IS_MACOS" ]]; then
+    umount "${TARGET_PATH}"?
+else
     TARGET_RAW="${TARGET_PATH:0:5}r${TARGET_PATH:5}"
     hdiutil convert "$ISO_IMAGE" -format UDRW -o "$TEMP_IMG"
+    SOURCE="${TEMP_IMG}.dmg"
     diskutil unmountDisk "$TARGET_PATH"
-else
-    umount "${TARGET_PATH}?"
 fi
 
-if [[ "$IS_MACOS" ]]; then
-    DD_COMMAND="sudo dd if="${TEMP_IMG}.dmg" of="$TARGET_RAW" bs=4m && sync"
-else
+if [[ -z "$IS_MACOS" ]]; then
     DD_COMMAND="sudo dd if=\"$ISO_IMAGE\" of=\"$TARGET_RAW\" bs=4M status=progress conv=fsync"
+else
+    DD_COMMAND="sudo dd if=\"$SOURCE\" of=\"$TARGET_RAW\" bs=4m && sync"
 fi
 
-eval $DD_COMMAND
+eval "$DD_COMMAND"
 
 # Remove temporary img file in macOS
 if [[ -f "${TEMP_IMG}.dmg" ]]; then
