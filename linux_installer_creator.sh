@@ -41,9 +41,9 @@ else
 fi
 
 if [[ -z "$IS_MACOS" ]]; then
-    DD_COMMAND="sudo dd if=\"$ISO_IMAGE\" of=\"$TARGET_RAW\" bs=4M status=progress conv=fsync"
+    DD_COMMAND="sudo dd if=\"$ISO_IMAGE\" of=\"$TARGET_RAW\" bs=32M status=progress conv=fsync"
 else
-    DD_COMMAND="sudo dd if=\"$SOURCE\" of=\"$TARGET_RAW\" bs=4m && sync"
+    DD_COMMAND="sudo dd if=\"$SOURCE\" of=\"$TARGET_RAW\" bs=32m && sync"
 fi
 
 eval "$DD_COMMAND"
